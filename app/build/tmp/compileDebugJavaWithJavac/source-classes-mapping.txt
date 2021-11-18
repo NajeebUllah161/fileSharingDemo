@@ -1,0 +1,23 @@
+com/example/android/wifidirect/BuildConfig.java
+ com.example.android.wifidirect.BuildConfig
+com/example/android/wifidirect/DeviceDetailFragment.java
+ com.example.android.wifidirect.DeviceDetailFragment
+ com.example.android.wifidirect.DeviceDetailFragment$1
+ com.example.android.wifidirect.DeviceDetailFragment$2
+ com.example.android.wifidirect.DeviceDetailFragment$3
+ com.example.android.wifidirect.DeviceDetailFragment$FileServerAsyncTask
+com/example/android/wifidirect/DeviceListFragment.java
+ com.example.android.wifidirect.DeviceListFragment
+ com.example.android.wifidirect.DeviceListFragment$1
+ com.example.android.wifidirect.DeviceListFragment$DeviceActionListener
+ com.example.android.wifidirect.DeviceListFragment$WiFiPeerListAdapter
+com/example/android/wifidirect/WiFiDirectBroadcastReceiver.java
+ com.example.android.wifidirect.WiFiDirectBroadcastReceiver
+com/example/android/wifidirect/WiFiDirectActivity.java
+ com.example.android.wifidirect.WiFiDirectActivity
+ com.example.android.wifidirect.WiFiDirectActivity$1
+ com.example.android.wifidirect.WiFiDirectActivity$2
+ com.example.android.wifidirect.WiFiDirectActivity$3
+ com.example.android.wifidirect.WiFiDirectActivity$4
+com/example/android/wifidirect/FileTransferService.java
+ com.example.android.wifidirect.FileTransferService

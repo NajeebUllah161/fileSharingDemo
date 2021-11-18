@@ -1,0 +1,140 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+MERGED from [androidx.core:core:1.5.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\97e7ec19bd11dff7ae3d399ac9d0fa5b\transformed\core-1.5.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\ffc5c1a0fdfdfc25fcc5cac404201a56\transformed\lifecycle-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\NAJEEB\.gradle\caches\transforms-3\d88cacb3ad7019752e911e94c62f5798\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:1-49:12
+	package
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:70-110
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:3:29-54
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:3:5-28
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+uses-sdk
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:5-44
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:5-44
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:5-44
+MERGED from [androidx.core:core:1.5.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\97e7ec19bd11dff7ae3d399ac9d0fa5b\transformed\core-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.5.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\97e7ec19bd11dff7ae3d399ac9d0fa5b\transformed\core-1.5.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\ffc5c1a0fdfdfc25fcc5cac404201a56\transformed\lifecycle-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\ffc5c1a0fdfdfc25fcc5cac404201a56\transformed\lifecycle-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\NAJEEB\.gradle\caches\transforms-3\d88cacb3ad7019752e911e94c62f5798\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\NAJEEB\.gradle\caches\transforms-3\d88cacb3ad7019752e911e94c62f5798\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:5-44
+INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:5-44
+	android:targetSdkVersion
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:5-44
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:6:15-41
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:7:5-76
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:7:22-73
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:8:5-76
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:8:22-73
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:9:5-79
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:9:22-76
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:10:5-67
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:10:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:11:5-79
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:11:22-76
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:12:5-75
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:12:22-72
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:13:5-81
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:13:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:14:5-79
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:14:22-76
+uses-feature#android.hardware.wifi.direct
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:17:5-88
+	android:required
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:17:63-86
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:17:19-62
+application
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:19:5-48:19
+MERGED from [androidx.core:core:1.5.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\97e7ec19bd11dff7ae3d399ac9d0fa5b\transformed\core-1.5.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.5.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\97e7ec19bd11dff7ae3d399ac9d0fa5b\transformed\core-1.5.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\NAJEEB\.gradle\caches\transforms-3\d88cacb3ad7019752e911e94c62f5798\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\NAJEEB\.gradle\caches\transforms-3\d88cacb3ad7019752e911e94c62f5798\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.5.0] C:\Users\NAJEEB\.gradle\caches\transforms-3\97e7ec19bd11dff7ae3d399ac9d0fa5b\transformed\core-1.5.0\AndroidManifest.xml:24:18-86
+	android:label
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:21:9-41
+	android:icon
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:20:9-45
+	android:theme
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:22:9-50
+activity#com.example.android.wifidirect.WiFiDirectActivity
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:23:9-33:20
+	android:label
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:26:13-45
+	android:launchMode
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:26:46-77
+	android:exported
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:24:13-47
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:27:13-32:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:28:17-29:65
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:29:21-62
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:30:17-31:71
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:31:21-68
+provider#androidx.core.content.FileProvider
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:35:9-43:20
+	android:grantUriPermissions
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:39:13-47
+	android:authorities
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:37:13-78
+	android:exported
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:38:13-37
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:36:13-62
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:40:13-42:58
+	android:resource
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:42:17-55
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:41:17-67
+service#com.example.android.wifidirect.FileTransferService
+ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:46:9-79
+	android:enabled
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:46:18-40
+	android:name
+		ADDED from C:\Users\NAJEEB\Documents\lads\File-Sharing\Wifi-Direct-Demo\app\src\main\AndroidManifest.xml:46:41-76
