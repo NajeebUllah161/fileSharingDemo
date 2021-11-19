@@ -1,5 +1,9 @@
+com/example/android/wifidirect/DemoFile.java
+ com.example.android.wifidirect.DemoFile
 com/example/android/wifidirect/BuildConfig.java
  com.example.android.wifidirect.BuildConfig
+com/example/android/wifidirect/FilesUtil.java
+ com.example.android.wifidirect.FilesUtil
 com/example/android/wifidirect/DeviceDetailFragment.java
  com.example.android.wifidirect.DeviceDetailFragment
  com.example.android.wifidirect.DeviceDetailFragment$1
@@ -21,3 +25,5 @@ com/example/android/wifidirect/WiFiDirectActivity.java
  com.example.android.wifidirect.WiFiDirectActivity$4
 com/example/android/wifidirect/FileTransferService.java
  com.example.android.wifidirect.FileTransferService
+helpers/PathUtil.java
+ helpers.PathUtil

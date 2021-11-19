@@ -124,6 +124,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
 
         // add necessary intent values to be matched.
 
+//        manager.removeGroup(channel,null);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
@@ -289,6 +290,11 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
                     "Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 
     @Override

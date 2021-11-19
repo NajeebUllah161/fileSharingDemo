@@ -40,14 +40,19 @@ import androidx.core.content.FileProvider;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.ArrayList;
+
+import helpers.PathUtil;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device
@@ -132,13 +137,30 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         // FileTransferService.
         mArrayUri.clear();
         // Get the image from data
+
+//        ArrayList<Uri> uris = new ArrayList<>();
+        ArrayList<Long> filesLength = new ArrayList<>();
+        ArrayList<String> fileNames = new ArrayList<>();
+
+
         if (data.getClipData() != null) {
-            ClipData myClipData = data.getClipData();
+//            ClipData myClipData = data.getClipData();
             int count = data.getClipData().getItemCount();
             for (int i = 0; i < count; i++) {
                 // adding imageUri in an array
                 imageUri = data.getClipData().getItemAt(i).getUri();
                 mArrayUri.add(imageUri);
+
+
+                String fileName =
+                        PathUtil.getPath(getContext(), data.getClipData().getItemAt(i).getUri());
+                filesLength.add(new File(fileName).length());
+                fileName = FilesUtil.getFileName(fileName);
+                fileNames.add(fileName);
+
+                Log.d("File URI", data.getClipData().getItemAt(i).getUri().toString());
+                Log.d("File Path", fileName);
+
             }
 
             TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
@@ -148,6 +170,14 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         } else {
             Uri imageUri = data.getData();
             mArrayUri.add(imageUri);
+
+            String fileName = PathUtil.getPath(getContext(), imageUri);
+            Log.d("Najeeb", fileName);
+            filesLength.add(new File(fileName).length());
+
+            fileName = FilesUtil.getFileName(fileName);
+            fileNames.add(fileName);
+
             TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
             statusText.setText("Sending: " + imageUri);
             Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
@@ -158,8 +188,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 //        Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
         Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
         serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-        Log.d("NajeebDeviceDetailFragment",mArrayUri.toString());
+        Log.d("NajeebDeviceDetailFragment", mArrayUri.toString());
+        // sending Uris, FileName and FileLength to FileTransfer Activity
         serviceIntent.putParcelableArrayListExtra(FileTransferService.EXTRAS_FILE_PATH, mArrayUri);
+        serviceIntent.putStringArrayListExtra(FileTransferService.EXTRAS_FILE_NAME, fileNames);
+        serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_LENGTH, filesLength);
 
 //        Log.d(WiFiDirectActivity.TAG, "ArrayList of Uri " + mArrayUri.toString());
         serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
@@ -241,7 +274,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
      * the stream.
      */
     public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
-
+        /**
+         * RECEIVER SIDE
+         */
         private Context context;
         private TextView statusText;
 
@@ -256,26 +291,71 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
         @Override
         protected String doInBackground(Void... params) {
+            int len;
+            byte buf[] = new byte[8192];
             try {
                 ServerSocket serverSocket = new ServerSocket(8988);
                 Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
                 Socket client = serverSocket.accept();
                 Log.d(WiFiDirectActivity.TAG, "Server: connection done");
-                final File f = new File(context.getExternalFilesDir("received"),
-                        "wifip2pshared-" + System.currentTimeMillis()
-                                + ".jpg");
+//                final File f = new File(context.getExternalFilesDir("received"),
+//                        "wifip2pshared-" + System.currentTimeMillis()
+//                                + ".jpg");
+//
+//                File dirs = new File(f.getParent());
+//                if (!dirs.exists())
+//                    dirs.mkdirs();
+//                f.createNewFile();
 
-                File dirs = new File(f.getParent());
-                if (!dirs.exists())
-                    dirs.mkdirs();
-                f.createNewFile();
-
-                Log.d(WiFiDirectActivity.TAG, "server: copying files " + f.toString());
                 InputStream inputstream = client.getInputStream();
-                copyFile(inputstream, new FileOutputStream(f));
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputstream);
+                File globalFile = null;
+                // we get size of item to be recieved
+                int sizeOfItems = objectInputStream.readInt();
+
+                // Get filenames and size for now to read the file
+                ArrayList<String> fileNames = (ArrayList<String>) objectInputStream.readObject();
+                ArrayList<Long> fileSizes = (ArrayList<Long>) objectInputStream.readObject();
+
+                Long fileSize;
+                Long fileSizeOriginal;
+
+                for (int i = 0; i < sizeOfItems; i++) {
+                    String fileName = fileNames.get(i);
+                    fileSize = fileSizes.get(i);
+                    fileSizeOriginal = fileSizes.get(i);
+
+
+                    globalFile = new File(context.getExternalFilesDir("received"),
+                            "wifip2pshared-" + System.currentTimeMillis()
+                                    + ".jpg");
+
+                    File dirs = new File(globalFile.getParent());
+                    if (!dirs.exists())
+                        dirs.mkdirs();
+                    globalFile.createNewFile();
+
+                    Log.d(WiFiDirectActivity.TAG, "server: copying files " + globalFile.toString());
+
+
+                    OutputStream outputStream = new FileOutputStream(globalFile);
+                    while (fileSize > 0 && (len = objectInputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
+                        outputStream.write(buf, 0, len);
+//                        outputStream.flush();
+                        fileSize -= len;
+
+                    }
+                    outputStream.close();
+                    int iter = 0;
+                    Log.d("FileProgressReceiver", String.valueOf(iter));
+                }
+
+//                copyFile1(inputstream, new FileOutputStream(f));
+                // close input stream one time from receiver side
+                objectInputStream.close();
                 serverSocket.close();
-                return f.getAbsolutePath();
-            } catch (IOException e) {
+                return globalFile.getAbsolutePath();
+            } catch (IOException | ClassNotFoundException e) {
                 Log.e(WiFiDirectActivity.TAG, e.getMessage());
                 return null;
             }
@@ -304,10 +384,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
         }
 
-        /*
-         * (non-Javadoc)
-         * @see android.os.AsyncTask#onPreExecute()
-         */
         @Override
         protected void onPreExecute() {
             statusText.setText("Opening a server socket");
@@ -315,21 +391,41 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
     }
 
-    public static boolean copyFile(InputStream inputStream, OutputStream out) {
-        byte buf[] = new byte[1024];
-        int len;
-        try {
-            while ((len = inputStream.read(buf)) != -1) {
-                out.write(buf, 0, len);
+    /**public static boolean copyFile(InputStream inputStream, OutputStream out) {
+     byte buf[] = new byte[1024];
+     int len;
+     try {
+     while ((len = inputStream.read(buf)) != -1) {
+     out.write(buf, 0, len);
 
-            }
-            out.close();
-            inputStream.close();
-        } catch (IOException e) {
-            Log.d(WiFiDirectActivity.TAG, e.toString());
-            return false;
-        }
-        return true;
-    }
+     }
+     //            out.close();
+     inputStream.close();
+     } catch (IOException e) {
+     Log.d(WiFiDirectActivity.TAG, e.toString());
+     return false;
+     }
+     return true;
+     }
 
+
+     public static boolean copyFile1(InputStream inputStream, OutputStream out) {
+     byte buf[] = new byte[1024];
+     int len;
+     try {
+     while ((len = inputStream.read(buf)) != -1) {
+     out.write(buf, 0, len);
+
+     }
+
+     Log.d("NajeebDeviceDetailFragmentInputStream", buf.toString());
+     out.close();
+     //            inputStream.close();
+     } catch (IOException e) {
+     Log.d(WiFiDirectActivity.TAG, e.toString());
+     return false;
+     }
+     return true;
+     }
+     **/
 }

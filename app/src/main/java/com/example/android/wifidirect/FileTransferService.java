@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -28,6 +29,8 @@ public class FileTransferService extends IntentService {
     private static final int SOCKET_TIMEOUT = 5000;
     public static final String ACTION_SEND_FILE = "com.example.android.wifidirect.SEND_FILE";
     public static final String EXTRAS_FILE_PATH = "file_url";
+    public static final String EXTRAS_FILE_NAME = "file_name";
+    public static final String EXTRAS_FILE_LENGTH = "file_length";
     public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
     public static final String EXTRAS_GROUP_OWNER_PORT = "go_port";
 
@@ -49,10 +52,14 @@ public class FileTransferService extends IntentService {
      **/
     @Override
     protected void onHandleIntent(Intent intent) {
-
+    /** SENDER SIDE*/
         Context context = getApplicationContext();
         if (intent.getAction().equals(ACTION_SEND_FILE)) {
             ArrayList<Parcelable> fileUri = intent.getExtras().getParcelableArrayList(EXTRAS_FILE_PATH);
+            ArrayList<Long> filesLength = (ArrayList<Long>) intent.getSerializableExtra(EXTRAS_FILE_LENGTH);
+            ArrayList<String> fileNames = intent.getStringArrayListExtra(EXTRAS_FILE_NAME);
+            int len;
+            byte buf[] = new byte[8192];
 
             Log.d("NajeebFileTransferService", fileUri.toString());
             Log.d("NajeebFileTransferService", fileUri.get(0).toString());
@@ -66,15 +73,37 @@ public class FileTransferService extends IntentService {
                 socket.connect((new InetSocketAddress(host, port)), SOCKET_TIMEOUT);
 
                 Log.d(WiFiDirectActivity.TAG, "Client socket - " + socket.isConnected());
-                OutputStream stream = socket.getOutputStream();
+                OutputStream outputStream = socket.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 ContentResolver cr = context.getContentResolver();
-                InputStream is = null;
-                try {
-                    is = cr.openInputStream(Uri.parse(String.valueOf(fileUri.get(1))));
-                } catch (FileNotFoundException e) {
-                    Log.d(WiFiDirectActivity.TAG, e.toString());
+
+                objectOutputStream.writeInt(fileUri.size());
+                objectOutputStream.writeObject(fileNames);
+//                objectOutputStream.flush();
+                objectOutputStream.writeObject(filesLength);
+//                objectOutputStream.flush();
+
+
+                InputStream inputStream = null;
+                for (Parcelable singleUri : fileUri) {
+                    Log.d("NajeebFileTransferService", String.valueOf(singleUri));
+                    try {
+                        inputStream = cr.openInputStream(Uri.parse(String.valueOf(singleUri)));
+                        while ((len = inputStream.read(buf)) != -1) {
+                            objectOutputStream.write(buf, 0, len);
+
+                        }
+                        inputStream.close();
+                    } catch (FileNotFoundException e) {
+                        Log.d(WiFiDirectActivity.TAG, e.toString());
+                    }
+                    int i = 0;
+                    Log.d("FileProgressSender", String.valueOf(i));
+                    i++;
+//                    DeviceDetailFragment.copyFile(inputStream, outputStream);
                 }
-                DeviceDetailFragment.copyFile(is, stream);
+                // close output stream one time from sender side
+                outputStream.close();
                 Log.d(WiFiDirectActivity.TAG, "Client: Data written");
 
             } catch (IOException e) {
