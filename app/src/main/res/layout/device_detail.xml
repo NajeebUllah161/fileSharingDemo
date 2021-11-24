@@ -28,9 +28,21 @@
                 android:text="@string/disconnect_peer_button" />
             <Button
                 android:id="@+id/btn_start_client"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:text="@string/get_file_button"
+                android:visibility="gone" />
+            <Button
+                android:id="@+id/btn_select_apk"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:text="Select Apk"
+                android:visibility="gone" />
+            <Button
+                android:id="@+id/send_files"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:text="Send Files"
                 android:visibility="gone" />
         </LinearLayout>
         <TextView

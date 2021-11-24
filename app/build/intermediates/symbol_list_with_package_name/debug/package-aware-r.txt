@@ -105,6 +105,7 @@ id atn_direct_enable
 id blocking
 id btn_connect
 id btn_disconnect
+id btn_select_apk
 id btn_start_client
 id chronometer
 id device_address
@@ -132,6 +133,7 @@ id notification_main_column
 id notification_main_column_container
 id right_icon
 id right_side
+id send_files
 id status_bar
 id status_text
 id tag_accessibility_actions

@@ -60,13 +60,17 @@ import helpers.PathUtil;
  */
 public class DeviceDetailFragment extends Fragment implements ConnectionInfoListener {
 
-    protected static final int CHOOSE_FILE_RESULT_CODE = 20;
+    protected static final int CHOOSE_FILE_REQUEST_CODE = 20;
+    protected static final int CHOOSE_APK_REQUEST_CODE = 30;
     private View mContentView = null;
     private WifiP2pDevice device;
     private WifiP2pInfo info;
     ProgressDialog progressDialog = null;
     ArrayList<Uri> mArrayUri;
     Uri imageUri;
+    ArrayList<Long> filesLength = new ArrayList<>();
+    ArrayList<String> fileNames = new ArrayList<>();
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -121,67 +125,42 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         // Allow user to pick an image from Gallery or other
                         // registered apps
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                        intent.setType("application/vnd.android.package-archive");
                         intent.setType("image/*");
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                        startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+                        startActivityForResult(intent, CHOOSE_FILE_REQUEST_CODE);
+                    }
+                });
+        /** Selecting Apk Intent **/
+        mContentView.findViewById(R.id.btn_select_apk).setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // Allow user to pick an image from Gallery or other
+                        // registered apps
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("application/vnd.android.package-archive");
+//                        intent.setType("images/*");
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        startActivityForResult(intent, CHOOSE_APK_REQUEST_CODE);
+                    }
+                });
+
+        mContentView.findViewById(R.id.send_files).setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        sendFiles();
+//                        Log.d("CheckingInfo", "File Name: " + fileNames + " File Length : " + filesLength);
                     }
                 });
 
         return mContentView;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /** Successfully picked image, now transfer URI to another activity **/
-        // User has picked an image. Transfer it to group owner i.e peer using
-        // FileTransferService.
-        mArrayUri.clear();
-        // Get the image from data
-
-//        ArrayList<Uri> uris = new ArrayList<>();
-        ArrayList<Long> filesLength = new ArrayList<>();
-        ArrayList<String> fileNames = new ArrayList<>();
-
-
-        if (data.getClipData() != null) {
-//            ClipData myClipData = data.getClipData();
-            int count = data.getClipData().getItemCount();
-            for (int i = 0; i < count; i++) {
-                // adding imageUri in an array
-                imageUri = data.getClipData().getItemAt(i).getUri();
-                mArrayUri.add(imageUri);
-
-
-                String fileName =
-                        PathUtil.getPath(getContext(), data.getClipData().getItemAt(i).getUri());
-                filesLength.add(new File(fileName).length());
-                fileName = FilesUtil.getFileName(fileName);
-                fileNames.add(fileName);
-
-                Log.d("File URI", data.getClipData().getItemAt(i).getUri().toString());
-                Log.d("File Path", fileName);
-
-            }
-
-            TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-            statusText.setText("Sending: " + imageUri);
-            Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
-
-        } else {
-            Uri imageUri = data.getData();
-            mArrayUri.add(imageUri);
-
-            String fileName = PathUtil.getPath(getContext(), imageUri);
-            Log.d("Najeeb", fileName);
-            filesLength.add(new File(fileName).length());
-
-            fileName = FilesUtil.getFileName(fileName);
-            fileNames.add(fileName);
-
-            TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-            statusText.setText("Sending: " + imageUri);
-            Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
-        }
+    public void sendFiles() {
 
 //        TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
 //        statusText.setText("Sending: " + image);
@@ -200,6 +179,100 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
         getActivity().startService(serviceIntent);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /** Successfully picked image, now transfer URI to another activity **/
+        // User has picked an image. Transfer it to group owner i.e peer using
+        // FileTransferService.
+//        mArrayUri.clear();
+        // Get the image from data
+
+//        ArrayList<Uri> uris = new ArrayList<>();
+
+        if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
+            if (data.getClipData() != null) {
+//            ClipData myClipData = data.getClipData();
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    // adding imageUri in an array
+                    imageUri = data.getClipData().getItemAt(i).getUri();
+                    mArrayUri.add(imageUri);
+
+
+                    String fileName =
+                            PathUtil.getPath(getContext(), data.getClipData().getItemAt(i).getUri());
+                    filesLength.add(new File(fileName).length());
+                    fileName = FilesUtil.getFileName(fileName);
+                    fileNames.add(fileName);
+
+                    Log.d("File URI", data.getClipData().getItemAt(i).getUri().toString());
+                    Log.d("File Path", fileName);
+
+                }
+
+                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                statusText.setText("Sending: " + imageUri);
+                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+
+            } else {
+                Uri imageUri = data.getData();
+                mArrayUri.add(imageUri);
+
+                String fileName = PathUtil.getPath(getContext(), imageUri);
+                Log.d("Najeeb", fileName);
+                filesLength.add(new File(fileName).length());
+
+                fileName = FilesUtil.getFileName(fileName);
+                fileNames.add(fileName);
+
+                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                statusText.setText("Sending: " + imageUri);
+                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+            }
+        } else if (requestCode == CHOOSE_APK_REQUEST_CODE) {
+            if (data.getClipData() != null) {
+//            ClipData myClipData = data.getClipData();
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    // adding imageUri in an array
+                    imageUri = data.getClipData().getItemAt(i).getUri();
+                    mArrayUri.add(imageUri);
+
+
+                    String fileName =
+                            PathUtil.getPath(getContext(), data.getClipData().getItemAt(i).getUri());
+                    filesLength.add(new File(fileName).length());
+                    fileName = FilesUtil.getFileName(fileName);
+                    fileNames.add(fileName);
+
+                    Log.d("File URI", data.getClipData().getItemAt(i).getUri().toString());
+                    Log.d("File Path", fileName);
+
+                }
+
+                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                statusText.setText("Sending: " + imageUri);
+                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+
+            } else {
+                Uri imageUri = data.getData();
+                mArrayUri.add(imageUri);
+
+                String fileName = PathUtil.getPath(getContext(), imageUri);
+                Log.d("Najeeb", fileName);
+                filesLength.add(new File(fileName).length());
+
+                fileName = FilesUtil.getFileName(fileName);
+                fileNames.add(fileName);
+
+                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                statusText.setText("Sending: " + imageUri);
+                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+            }
+        }
+    }
+
 
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
@@ -229,6 +302,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             // The other device acts as the client. In this case, we enable the
             // get file button.
             mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
+            mContentView.findViewById(R.id.btn_select_apk).setVisibility(View.VISIBLE);
+            mContentView.findViewById(R.id.send_files).setVisibility(View.VISIBLE);
             ((TextView) mContentView.findViewById(R.id.status_text)).setText(getResources()
                     .getString(R.string.client_text));
         }
@@ -266,6 +341,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         view = (TextView) mContentView.findViewById(R.id.status_text);
         view.setText(R.string.empty);
         mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
+        mContentView.findViewById(R.id.btn_select_apk).setVisibility(View.GONE);
+        mContentView.findViewById(R.id.send_files).setVisibility(View.GONE);
         this.getView().setVisibility(View.GONE);
     }
 
@@ -326,9 +403,16 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     fileSizeOriginal = fileSizes.get(i);
 
 
-                    globalFile = new File(context.getExternalFilesDir("received"),
-                            "wifip2pshared-" + System.currentTimeMillis()
-                                    + ".jpg");
+                    if (fileName.endsWith(".apk")) {
+//                        Log.d("fileName", fileName);
+                        globalFile = new File(context.getExternalFilesDir("received"),
+                                "wifip2pshared-" + System.currentTimeMillis()
+                                        + ".apk");
+                    } else {
+                        globalFile = new File(context.getExternalFilesDir("received"),
+                                "wifip2pshared-" + System.currentTimeMillis()
+                                        + ".jpg");
+                    }
 
                     File dirs = new File(globalFile.getParent());
                     if (!dirs.exists())
@@ -336,7 +420,6 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     globalFile.createNewFile();
 
                     Log.d(WiFiDirectActivity.TAG, "server: copying files " + globalFile.toString());
-
 
                     OutputStream outputStream = new FileOutputStream(globalFile);
                     while (fileSize > 0 && (len = objectInputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
@@ -377,9 +460,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         recvFile);
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(fileUri, "image/*");
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                context.startActivity(intent);
+//                intent.setDataAndType(fileUri, "image/*");
+//                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                context.startActivity(intent);
             }
 
         }
