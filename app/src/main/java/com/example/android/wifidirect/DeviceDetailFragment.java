@@ -435,14 +435,12 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         fileSize -= len;
 
                     }
+                    // Closing output stream after every iteration and publishing new value to localBroadcast
                     outputStream.close();
-//                    int iter = 0;
-//                    Log.d("FileProgressReceiver", String.valueOf(iter));
-
                     publishProgress(Integer.toString(i));
                 }
 
-                // close input stream one time from receiver side
+                // close input stream one time from receiver side in the end of file sharing
                 objectInputStream.close();
                 serverSocket.close();
                 return globalFile.getAbsolutePath();
@@ -461,7 +459,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                statusText.setText("File copied - " + result);
+                statusText.setText("File copied : " + result);
 
                 File recvFile = new File(result);
                 Uri fileUri = FileProvider.getUriForFile(
@@ -470,18 +468,19 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         recvFile);
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
-//                intent.setDataAndType(fileUri, "image/*");
-//                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                context.startActivity(intent);
-            }
 
+                /** Display one of the images which are shared.
+                 *
+                 intent.setDataAndType(fileUri, "image/*");
+                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                 context.startActivity(intent);
+                 **/
+            }
         }
 
         @Override
         protected void onPreExecute() {
-            statusText.setText("Opening a server socket");
+            statusText.setText(R.string.open_socket_server_txt);
         }
-
     }
-
 }
