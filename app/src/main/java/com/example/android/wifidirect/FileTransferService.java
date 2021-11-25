@@ -63,8 +63,8 @@ public class FileTransferService extends IntentService {
             int len;
             byte buf[] = new byte[8192];
 
-            Log.d("NajeebFileTransferService", fileUri.toString());
-            Log.d("NajeebFileTransferService", fileUri.get(0).toString());
+//            Log.d("NajeebFileTransferService", fileUri.toString());
+//            Log.d("NajeebFileTransferService", fileUri.get(0).toString());
             String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
             Socket socket = new Socket();
             int port = intent.getExtras().getInt(EXTRAS_GROUP_OWNER_PORT);
@@ -87,7 +87,7 @@ public class FileTransferService extends IntentService {
 
 
                 InputStream inputStream = null;
-                int i = 0;
+                int i = 1;
 
                 for (Parcelable singleUri : fileUri) {
                     Log.d("NajeebFileTransferService", String.valueOf(singleUri));
@@ -102,7 +102,7 @@ public class FileTransferService extends IntentService {
                         Log.d(WiFiDirectActivity.TAG, e.toString());
                     }
                     publishResults(i);
-                    Log.d("FileProgressSender", String.valueOf(i));
+//                    Log.d("FileProgressSender", String.valueOf(i));
                     i++;
 //                    DeviceDetailFragment.copyFile(inputStream, outputStream);
                 }
@@ -124,7 +124,6 @@ public class FileTransferService extends IntentService {
                     }
                 }
             }
-
         }
     }
 

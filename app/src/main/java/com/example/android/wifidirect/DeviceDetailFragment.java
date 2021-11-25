@@ -67,7 +67,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                 int resultCode = bundle.getInt(FileTransferService.RESULT);
 
                 Toast.makeText(context.getApplicationContext(),
-                        "I broadcasted : " + resultCode,
+                        "File : " + resultCode + " Sent",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -139,9 +139,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         // Sending data on Peer
         mContentView.findViewById(R.id.send_files).setOnClickListener(
                 v -> {
+                    Toast.makeText(getActivity(), "Sending Files!", Toast.LENGTH_SHORT).show();
                     sendFiles();
                     clearArrayLists();
-//                        Toast.makeText(getActivity(), "something", Toast.LENGTH_SHORT).show();
 //                        Log.d("CheckingInfo", "File Name: " + fileNames + " File Length : " + filesLength + "Uri: " + mArrayUri);
 
                 });
@@ -369,7 +369,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
      * A simple server socket that accepts connection and writes some data on
      * the stream.
      */
-    public static class FileServerAsyncTask extends AsyncTask<Void, Integer, String> {
+    public static class FileServerAsyncTask extends AsyncTask<Void, String, String> {
         /**
          * RECEIVER SIDE
          */
@@ -436,13 +436,12 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
                     }
                     outputStream.close();
-                    int iter = 0;
-                    Log.d("FileProgressReceiver", String.valueOf(iter));
+//                    int iter = 0;
+//                    Log.d("FileProgressReceiver", String.valueOf(iter));
 
-                    publishProgress(i);
+                    publishProgress(Integer.toString(i));
                 }
 
-//                copyFile1(inputstream, new FileOutputStream(f));
                 // close input stream one time from receiver side
                 objectInputStream.close();
                 serverSocket.close();
@@ -454,7 +453,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
             Toast.makeText(context.getApplicationContext(), "File " + values + " shared.", Toast.LENGTH_SHORT).show();
         }
