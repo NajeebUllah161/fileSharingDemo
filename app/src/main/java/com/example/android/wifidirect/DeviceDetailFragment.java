@@ -143,7 +143,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     sendFiles();
                     clearArrayLists();
 //                        Log.d("CheckingInfo", "File Name: " + fileNames + " File Length : " + filesLength + "Uri: " + mArrayUri);
-
+//
                 });
 
         return mContentView;
