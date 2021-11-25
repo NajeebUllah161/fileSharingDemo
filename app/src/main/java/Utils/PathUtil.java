@@ -1,4 +1,4 @@
-package helpers;
+package Utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
@@ -19,6 +19,7 @@ import java.io.InputStream;
 
 public class PathUtil {
 
+    @SuppressLint("StaticFieldLeak")
     static Context localContext;
 
     @SuppressLint("NewApi")

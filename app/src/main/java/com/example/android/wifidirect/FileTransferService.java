@@ -33,6 +33,8 @@ public class FileTransferService extends IntentService {
     public static final String EXTRAS_FILE_LENGTH = "file_length";
     public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
     public static final String EXTRAS_GROUP_OWNER_PORT = "go_port";
+    public static final String RESULT = "result";
+    public static final String NOTIFICATION = "com.example.android.wifidirect";
 
     public FileTransferService(String name) {
         super(name);
@@ -85,6 +87,8 @@ public class FileTransferService extends IntentService {
 
 
                 InputStream inputStream = null;
+                int i = 0;
+
                 for (Parcelable singleUri : fileUri) {
                     Log.d("NajeebFileTransferService", String.valueOf(singleUri));
                     try {
@@ -97,7 +101,7 @@ public class FileTransferService extends IntentService {
                     } catch (FileNotFoundException e) {
                         Log.d(WiFiDirectActivity.TAG, e.toString());
                     }
-                    int i = 0;
+                    publishResults(i);
                     Log.d("FileProgressSender", String.valueOf(i));
                     i++;
 //                    DeviceDetailFragment.copyFile(inputStream, outputStream);
@@ -123,4 +127,11 @@ public class FileTransferService extends IntentService {
 
         }
     }
+
+    private void publishResults(int result) {
+        Intent intent = new Intent(NOTIFICATION);
+        intent.putExtra(RESULT, result);
+        sendBroadcast(intent);
+    }
+
 }

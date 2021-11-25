@@ -180,6 +180,7 @@ string label_me
 string label_peers
 string no
 string p2p_off_warning
+string sending_txt
 string status_bar_notification_info_overflow
 string yes
 style TextAppearance_Compat_Notification

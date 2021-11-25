@@ -39,6 +39,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- <service android:name="com.example.android.wifidirect" -->
+            <!-- tools:ignore="MissingClass,WrongManifestParent"> -->
+
+
+            <!-- </service> -->
         </activity>
 
         <provider

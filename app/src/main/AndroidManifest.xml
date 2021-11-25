@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.android.wifidirect"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.android.wifidirect"
     android:versionCode="1" android:versionName="1.0">
 
     <!-- runtime permission check API is on Android 6.0 or higher -->
@@ -30,6 +32,10 @@
                 <category
                     android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--            <service android:name="com.example.android.wifidirect"-->
+<!--                tools:ignore="MissingClass,WrongManifestParent">-->
+
+<!--            </service>-->
         </activity>
 
         <provider

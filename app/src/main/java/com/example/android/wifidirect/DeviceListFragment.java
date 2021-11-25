@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.wifidirect;
 
 import android.app.ListFragment;
@@ -42,7 +26,7 @@ import java.util.List;
  */
 public class DeviceListFragment extends ListFragment implements PeerListListener {
 
-    private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+    private final List<WifiP2pDevice> peers = new ArrayList<>();
     ProgressDialog progressDialog = null;
     View mContentView = null;
     private WifiP2pDevice device;
@@ -100,7 +84,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
      */
     private class WiFiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
 
-        private List<WifiP2pDevice> items;
+        private final List<WifiP2pDevice> items;
 
         /**
          * @param context
@@ -108,7 +92,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
          * @param objects
          */
         public WiFiPeerListAdapter(Context context, int textViewResourceId,
-                List<WifiP2pDevice> objects) {
+                                   List<WifiP2pDevice> objects) {
             super(context, textViewResourceId, objects);
             items = objects;
 
@@ -124,8 +108,8 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
             }
             WifiP2pDevice device = items.get(position);
             if (device != null) {
-                TextView top = (TextView) v.findViewById(R.id.device_name);
-                TextView bottom = (TextView) v.findViewById(R.id.device_details);
+                TextView top = v.findViewById(R.id.device_name);
+                TextView bottom = v.findViewById(R.id.device_details);
                 if (top != null) {
                     top.setText(device.deviceName);
                 }
@@ -141,14 +125,14 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
     /**
      * Update UI for this device.
-     * 
+     *
      * @param device WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice device) {
         this.device = device;
-        TextView view = (TextView) mContentView.findViewById(R.id.my_name);
+        TextView view = mContentView.findViewById(R.id.my_name);
         view.setText(device.deviceName);
-        view = (TextView) mContentView.findViewById(R.id.my_status);
+        view = mContentView.findViewById(R.id.my_status);
         view.setText(getDeviceStatus(device.status));
     }
 
@@ -173,7 +157,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     }
 
     /**
-     * 
+     *
      */
     public void onInitiateDiscovery() {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -184,7 +168,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        
+
                     }
                 });
     }

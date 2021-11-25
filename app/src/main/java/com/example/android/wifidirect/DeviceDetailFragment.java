@@ -1,26 +1,13 @@
-/*
- * Copyright (C) 2011 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.wifidirect;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -35,12 +22,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,10 +36,10 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-import helpers.PathUtil;
+import Utils.FilesUtil;
+import Utils.PathUtil;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device
@@ -71,17 +58,33 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     ArrayList<Long> filesLength = new ArrayList<>();
     ArrayList<String> fileNames = new ArrayList<>();
 
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                int resultCode = bundle.getInt(FileTransferService.RESULT);
+
+                Toast.makeText(context.getApplicationContext(),
+                        "I broadcasted : " + resultCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mContentView = inflater.inflate(R.layout.device_detail, null);
-        mArrayUri = new ArrayList<Uri>();
+        mArrayUri = new ArrayList<>();
         mContentView.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -107,115 +110,113 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             }
         });
 
+        // Disconnect with user
         mContentView.findViewById(R.id.btn_disconnect).setOnClickListener(
-                new View.OnClickListener() {
+                v -> ((DeviceActionListener) getActivity()).disconnect());
 
-                    @Override
-                    public void onClick(View v) {
-                        ((DeviceActionListener) getActivity()).disconnect();
-                    }
-                });
-
-        /** Selecting Image Itent**/
+        // Selecting Image Intent
         mContentView.findViewById(R.id.btn_start_client).setOnClickListener(
-                new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        // Allow user to pick an image from Gallery or other
-                        // registered apps
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                        intent.setType("application/vnd.android.package-archive");
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                        startActivityForResult(intent, CHOOSE_FILE_REQUEST_CODE);
-                    }
+                v -> {
+                    // Allow user to pick an image from Gallery or other
+                    // registered apps
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    startActivityForResult(intent, CHOOSE_FILE_REQUEST_CODE);
                 });
-        /** Selecting Apk Intent **/
+
+        // Selecting Apk Intent
         mContentView.findViewById(R.id.btn_select_apk).setOnClickListener(
-                new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        // Allow user to pick an image from Gallery or other
-                        // registered apps
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("application/vnd.android.package-archive");
-//                        intent.setType("images/*");
-                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                        startActivityForResult(intent, CHOOSE_APK_REQUEST_CODE);
-                    }
+                v -> {
+                    // Allow user to pick an apk from File or other
+                    // registered apps
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("application/vnd.android.package-archive");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    startActivityForResult(intent, CHOOSE_APK_REQUEST_CODE);
                 });
 
+        // Sending data on Peer
         mContentView.findViewById(R.id.send_files).setOnClickListener(
-                new View.OnClickListener() {
+                v -> {
+                    sendFiles();
+                    clearArrayLists();
+//                        Toast.makeText(getActivity(), "something", Toast.LENGTH_SHORT).show();
+//                        Log.d("CheckingInfo", "File Name: " + fileNames + " File Length : " + filesLength + "Uri: " + mArrayUri);
 
-                    @Override
-                    public void onClick(View v) {
-                        sendFiles();
-//                        Log.d("CheckingInfo", "File Name: " + fileNames + " File Length : " + filesLength);
-                    }
                 });
 
         return mContentView;
     }
 
+    // Clear all array lists to avoid duplication of files
+    private void clearArrayLists() {
+        fileNames.clear();
+        filesLength.clear();
+        mArrayUri.clear();
+    }
+
+    // Send Files to connected device using P2P technology
     public void sendFiles() {
 
 //        TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
 //        statusText.setText("Sending: " + image);
 //        Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
-        Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-        serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-        Log.d("NajeebDeviceDetailFragment", mArrayUri.toString());
-        // sending Uris, FileName and FileLength to FileTransfer Activity
-        serviceIntent.putParcelableArrayListExtra(FileTransferService.EXTRAS_FILE_PATH, mArrayUri);
-        serviceIntent.putStringArrayListExtra(FileTransferService.EXTRAS_FILE_NAME, fileNames);
-        serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_LENGTH, filesLength);
+        if (!(fileNames.isEmpty() && filesLength.isEmpty() && mArrayUri.isEmpty())) {
+
+            Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+            serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
+            Log.d("NajeebDeviceDetailFragment", mArrayUri.toString());
+            // sending Uris, FileName and FileLength to FileTransfer Activity
+            serviceIntent.putParcelableArrayListExtra(FileTransferService.EXTRAS_FILE_PATH, mArrayUri);
+            serviceIntent.putStringArrayListExtra(FileTransferService.EXTRAS_FILE_NAME, fileNames);
+            serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_LENGTH, filesLength);
 
 //        Log.d(WiFiDirectActivity.TAG, "ArrayList of Uri " + mArrayUri.toString());
-        serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-                info.groupOwnerAddress.getHostAddress());
-        serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
-        getActivity().startService(serviceIntent);
+            serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
+                    info.groupOwnerAddress.getHostAddress());
+            serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
+            getActivity().startService(serviceIntent);
+        } else {
+            Toast.makeText(getActivity(), "Please Select Files First.", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /** Successfully picked image, now transfer URI to another activity **/
+
+        // Successfully picked image, now transfer URI to an intent service which does the rest
         // User has picked an image. Transfer it to group owner i.e peer using
         // FileTransferService.
-//        mArrayUri.clear();
-        // Get the image from data
-
-//        ArrayList<Uri> uris = new ArrayList<>();
 
         if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
             if (data.getClipData() != null) {
-//            ClipData myClipData = data.getClipData();
-                int count = data.getClipData().getItemCount();
+                ClipData myClipData = data.getClipData();
+                int count = myClipData.getItemCount();
                 for (int i = 0; i < count; i++) {
                     // adding imageUri in an array
-                    imageUri = data.getClipData().getItemAt(i).getUri();
+                    imageUri = myClipData.getItemAt(i).getUri();
                     mArrayUri.add(imageUri);
 
 
                     String fileName =
-                            PathUtil.getPath(getContext(), data.getClipData().getItemAt(i).getUri());
+                            PathUtil.getPath(getContext(), myClipData.getItemAt(i).getUri());
                     filesLength.add(new File(fileName).length());
                     fileName = FilesUtil.getFileName(fileName);
                     fileNames.add(fileName);
 
-                    Log.d("File URI", data.getClipData().getItemAt(i).getUri().toString());
+                    Log.d("File URI", myClipData.getItemAt(i).getUri().toString());
                     Log.d("File Path", fileName);
 
                 }
 
-                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                TextView statusText = mContentView.findViewById(R.id.status_text);
                 statusText.setText("Sending: " + imageUri);
                 Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
 
             } else {
+
                 Uri imageUri = data.getData();
                 mArrayUri.add(imageUri);
 
@@ -226,33 +227,34 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                 fileName = FilesUtil.getFileName(fileName);
                 fileNames.add(fileName);
 
-                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                TextView statusText = mContentView.findViewById(R.id.status_text);
                 statusText.setText("Sending: " + imageUri);
                 Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+
             }
         } else if (requestCode == CHOOSE_APK_REQUEST_CODE) {
+
             if (data.getClipData() != null) {
-//            ClipData myClipData = data.getClipData();
-                int count = data.getClipData().getItemCount();
+                ClipData myClipData = data.getClipData();
+                int count = myClipData.getItemCount();
                 for (int i = 0; i < count; i++) {
                     // adding imageUri in an array
-                    imageUri = data.getClipData().getItemAt(i).getUri();
+                    imageUri = myClipData.getItemAt(i).getUri();
                     mArrayUri.add(imageUri);
 
-
                     String fileName =
-                            PathUtil.getPath(getContext(), data.getClipData().getItemAt(i).getUri());
+                            PathUtil.getPath(getContext(), myClipData.getItemAt(i).getUri());
                     filesLength.add(new File(fileName).length());
                     fileName = FilesUtil.getFileName(fileName);
                     fileNames.add(fileName);
 
-                    Log.d("File URI", data.getClipData().getItemAt(i).getUri().toString());
+                    Log.d("File URI", myClipData.getItemAt(i).getUri().toString());
                     Log.d("File Path", fileName);
 
                 }
 
-                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-                statusText.setText("Sending: " + imageUri);
+                TextView statusText = mContentView.findViewById(R.id.status_text);
+                statusText.setText(getString(R.string.sending_txt) + imageUri);
                 Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
 
             } else {
@@ -266,14 +268,18 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                 fileName = FilesUtil.getFileName(fileName);
                 fileNames.add(fileName);
 
-                TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-                statusText.setText("Sending: " + imageUri);
+                TextView statusText = mContentView.findViewById(R.id.status_text);
+                statusText.setText(getString(R.string.sending_txt) + imageUri);
                 Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
             }
+        } else {
+            // Complimentary Else
+            Log.d("Complimentary else", "Check Complimentary Else comment for troubleshooting");
         }
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -283,13 +289,13 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         this.getView().setVisibility(View.VISIBLE);
 
         // The owner IP is now known.
-        TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
+        TextView view = mContentView.findViewById(R.id.group_owner);
         view.setText(getResources().getString(R.string.group_owner_text)
-                + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
+                + ((info.isGroupOwner) ? getResources().getString(R.string.yes)
                 : getResources().getString(R.string.no)));
 
         // InetAddress from WifiP2pInfo struct.
-        view = (TextView) mContentView.findViewById(R.id.device_info);
+        view = mContentView.findViewById(R.id.device_info);
         view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
 
         // After the group negotiation, we assign the group owner as the file
@@ -320,9 +326,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     public void showDetails(WifiP2pDevice device) {
         this.device = device;
         this.getView().setVisibility(View.VISIBLE);
-        TextView view = (TextView) mContentView.findViewById(R.id.device_address);
+        TextView view = mContentView.findViewById(R.id.device_address);
         view.setText(device.deviceAddress);
-        view = (TextView) mContentView.findViewById(R.id.device_info);
+        view = mContentView.findViewById(R.id.device_info);
         view.setText(device.toString());
 
     }
@@ -332,13 +338,13 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
      */
     public void resetViews() {
         mContentView.findViewById(R.id.btn_connect).setVisibility(View.VISIBLE);
-        TextView view = (TextView) mContentView.findViewById(R.id.device_address);
+        TextView view = mContentView.findViewById(R.id.device_address);
         view.setText(R.string.empty);
-        view = (TextView) mContentView.findViewById(R.id.device_info);
+        view = mContentView.findViewById(R.id.device_info);
         view.setText(R.string.empty);
-        view = (TextView) mContentView.findViewById(R.id.group_owner);
+        view = mContentView.findViewById(R.id.group_owner);
         view.setText(R.string.empty);
-        view = (TextView) mContentView.findViewById(R.id.status_text);
+        view = mContentView.findViewById(R.id.status_text);
         view.setText(R.string.empty);
         mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
         mContentView.findViewById(R.id.btn_select_apk).setVisibility(View.GONE);
@@ -346,21 +352,30 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         this.getView().setVisibility(View.GONE);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(receiver, new IntentFilter(
+                FileTransferService.NOTIFICATION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
+    }
+
     /**
      * A simple server socket that accepts connection and writes some data on
      * the stream.
      */
-    public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
+    public static class FileServerAsyncTask extends AsyncTask<Void, Integer, String> {
         /**
          * RECEIVER SIDE
          */
-        private Context context;
-        private TextView statusText;
+        private final Context context;
+        private final TextView statusText;
 
-        /**
-         * @param context
-         * @param statusText
-         */
         public FileServerAsyncTask(Context context, View statusText) {
             this.context = context;
             this.statusText = (TextView) statusText;
@@ -369,25 +384,17 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         @Override
         protected String doInBackground(Void... params) {
             int len;
-            byte buf[] = new byte[8192];
+            byte[] buf = new byte[8192];
             try {
                 ServerSocket serverSocket = new ServerSocket(8988);
                 Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
                 Socket client = serverSocket.accept();
                 Log.d(WiFiDirectActivity.TAG, "Server: connection done");
-//                final File f = new File(context.getExternalFilesDir("received"),
-//                        "wifip2pshared-" + System.currentTimeMillis()
-//                                + ".jpg");
-//
-//                File dirs = new File(f.getParent());
-//                if (!dirs.exists())
-//                    dirs.mkdirs();
-//                f.createNewFile();
 
                 InputStream inputstream = client.getInputStream();
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputstream);
                 File globalFile = null;
-                // we get size of item to be recieved
+                // we get size of item to be received
                 int sizeOfItems = objectInputStream.readInt();
 
                 // Get filenames and size for now to read the file
@@ -431,6 +438,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     outputStream.close();
                     int iter = 0;
                     Log.d("FileProgressReceiver", String.valueOf(iter));
+
+                    publishProgress(i);
                 }
 
 //                copyFile1(inputstream, new FileOutputStream(f));
@@ -444,10 +453,12 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             }
         }
 
-        /*
-         * (non-Javadoc)
-         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-         */
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            Toast.makeText(context.getApplicationContext(), "File " + values + " shared.", Toast.LENGTH_SHORT).show();
+        }
+
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
@@ -474,41 +485,4 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
     }
 
-    /**public static boolean copyFile(InputStream inputStream, OutputStream out) {
-     byte buf[] = new byte[1024];
-     int len;
-     try {
-     while ((len = inputStream.read(buf)) != -1) {
-     out.write(buf, 0, len);
-
-     }
-     //            out.close();
-     inputStream.close();
-     } catch (IOException e) {
-     Log.d(WiFiDirectActivity.TAG, e.toString());
-     return false;
-     }
-     return true;
-     }
-
-
-     public static boolean copyFile1(InputStream inputStream, OutputStream out) {
-     byte buf[] = new byte[1024];
-     int len;
-     try {
-     while ((len = inputStream.read(buf)) != -1) {
-     out.write(buf, 0, len);
-
-     }
-
-     Log.d("NajeebDeviceDetailFragmentInputStream", buf.toString());
-     out.close();
-     //            inputStream.close();
-     } catch (IOException e) {
-     Log.d(WiFiDirectActivity.TAG, e.toString());
-     return false;
-     }
-     return true;
-     }
-     **/
 }

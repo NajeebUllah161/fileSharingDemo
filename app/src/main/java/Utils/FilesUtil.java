@@ -1,4 +1,4 @@
-package com.example.android.wifidirect;
+package Utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +41,4 @@ public class FilesUtil {
         }
         return fileName.substring(start + 1);
     }
-
-
 }
