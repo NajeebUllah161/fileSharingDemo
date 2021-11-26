@@ -1,6 +1,7 @@
 package com.example.android.wifidirect;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -73,10 +74,16 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         }
     };
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d("Lifecycle", "OnActivityCreated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("Lifecycle", "onStart");
     }
 
     @SuppressLint("InflateParams")
@@ -122,7 +129,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    startActivityForResult(intent, CHOOSE_FILE_REQUEST_CODE);
+                    startActivityForResult(Intent.createChooser(intent, "Select photo"), CHOOSE_FILE_REQUEST_CODE);
                 });
 
         // Selecting Apk Intent
@@ -189,92 +196,95 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         // Successfully picked image, now transfer URI to an intent service which does the rest
         // User has picked an image. Transfer it to group owner i.e peer using
         // FileTransferService.
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
+                if (data.getClipData() != null) {
+                    ClipData myClipData = data.getClipData();
+                    int count = myClipData.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        // adding imageUri in an array
+                        imageUri = myClipData.getItemAt(i).getUri();
+                        mArrayUri.add(imageUri);
 
-        if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
-            if (data.getClipData() != null) {
-                ClipData myClipData = data.getClipData();
-                int count = myClipData.getItemCount();
-                for (int i = 0; i < count; i++) {
-                    // adding imageUri in an array
-                    imageUri = myClipData.getItemAt(i).getUri();
+
+                        String fileName =
+                                PathUtil.getPath(getContext(), myClipData.getItemAt(i).getUri());
+                        filesLength.add(new File(fileName).length());
+                        fileName = FilesUtil.getFileName(fileName);
+                        fileNames.add(fileName);
+
+                        Log.d("File URI", myClipData.getItemAt(i).getUri().toString());
+                        Log.d("File Path", fileName);
+
+                    }
+
+                    TextView statusText = mContentView.findViewById(R.id.status_text);
+                    statusText.setText("Sending: " + imageUri);
+                    Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+
+                } else {
+
+                    Uri imageUri = data.getData();
                     mArrayUri.add(imageUri);
 
-
-                    String fileName =
-                            PathUtil.getPath(getContext(), myClipData.getItemAt(i).getUri());
+                    String fileName = PathUtil.getPath(getContext(), imageUri);
+                    Log.d("Najeeb", fileName);
                     filesLength.add(new File(fileName).length());
+
                     fileName = FilesUtil.getFileName(fileName);
                     fileNames.add(fileName);
 
-                    Log.d("File URI", myClipData.getItemAt(i).getUri().toString());
-                    Log.d("File Path", fileName);
+                    TextView statusText = mContentView.findViewById(R.id.status_text);
+                    statusText.setText("Sending: " + imageUri);
+                    Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
 
                 }
+            } else if (requestCode == CHOOSE_APK_REQUEST_CODE) {
 
-                TextView statusText = mContentView.findViewById(R.id.status_text);
-                statusText.setText("Sending: " + imageUri);
-                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+                if (data.getClipData() != null) {
+                    ClipData myClipData = data.getClipData();
+                    int count = myClipData.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        // adding imageUri in an array
+                        imageUri = myClipData.getItemAt(i).getUri();
+                        mArrayUri.add(imageUri);
 
-            } else {
+                        String fileName =
+                                PathUtil.getPath(getContext(), myClipData.getItemAt(i).getUri());
+                        filesLength.add(new File(fileName).length());
+                        fileName = FilesUtil.getFileName(fileName);
+                        fileNames.add(fileName);
 
-                Uri imageUri = data.getData();
-                mArrayUri.add(imageUri);
+                        Log.d("File URI", myClipData.getItemAt(i).getUri().toString());
+                        Log.d("File Path", fileName);
 
-                String fileName = PathUtil.getPath(getContext(), imageUri);
-                Log.d("Najeeb", fileName);
-                filesLength.add(new File(fileName).length());
+                    }
 
-                fileName = FilesUtil.getFileName(fileName);
-                fileNames.add(fileName);
+                    TextView statusText = mContentView.findViewById(R.id.status_text);
+                    statusText.setText(getString(R.string.sending_txt) + imageUri);
+                    Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
 
-                TextView statusText = mContentView.findViewById(R.id.status_text);
-                statusText.setText("Sending: " + imageUri);
-                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
-
-            }
-        } else if (requestCode == CHOOSE_APK_REQUEST_CODE) {
-
-            if (data.getClipData() != null) {
-                ClipData myClipData = data.getClipData();
-                int count = myClipData.getItemCount();
-                for (int i = 0; i < count; i++) {
-                    // adding imageUri in an array
-                    imageUri = myClipData.getItemAt(i).getUri();
+                } else {
+                    Uri imageUri = data.getData();
                     mArrayUri.add(imageUri);
 
-                    String fileName =
-                            PathUtil.getPath(getContext(), myClipData.getItemAt(i).getUri());
+                    String fileName = PathUtil.getPath(getContext(), imageUri);
+                    Log.d("Najeeb", fileName);
                     filesLength.add(new File(fileName).length());
+
                     fileName = FilesUtil.getFileName(fileName);
                     fileNames.add(fileName);
 
-                    Log.d("File URI", myClipData.getItemAt(i).getUri().toString());
-                    Log.d("File Path", fileName);
-
+                    TextView statusText = mContentView.findViewById(R.id.status_text);
+                    statusText.setText(getString(R.string.sending_txt) + imageUri);
+                    Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
                 }
-
-                TextView statusText = mContentView.findViewById(R.id.status_text);
-                statusText.setText(getString(R.string.sending_txt) + imageUri);
-                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
-
             } else {
-                Uri imageUri = data.getData();
-                mArrayUri.add(imageUri);
-
-                String fileName = PathUtil.getPath(getContext(), imageUri);
-                Log.d("Najeeb", fileName);
-                filesLength.add(new File(fileName).length());
-
-                fileName = FilesUtil.getFileName(fileName);
-                fileNames.add(fileName);
-
-                TextView statusText = mContentView.findViewById(R.id.status_text);
-                statusText.setText(getString(R.string.sending_txt) + imageUri);
-                Log.d(WiFiDirectActivity.TAG, "Intent----------- " + imageUri);
+                // Complimentary Else
+                Log.d("Complimentary else", "Check Complimentary Else comment for troubleshooting");
             }
         } else {
-            // Complimentary Else
-            Log.d("Complimentary else", "Check Complimentary Else comment for troubleshooting");
+            Log.d("ResultCode", "NotOkay");
         }
     }
 
@@ -357,12 +367,14 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         super.onResume();
         getActivity().registerReceiver(receiver, new IntentFilter(
                 FileTransferService.NOTIFICATION));
+        Log.d("Lifecycle", "onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         getActivity().unregisterReceiver(receiver);
+        Log.d("Lifecycle", "onPause");
     }
 
     /**
