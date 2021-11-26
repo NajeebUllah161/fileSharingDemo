@@ -97,6 +97,7 @@
     <string name="label_me">ME</string>
     <string name="label_peers">PEERS</string>
     <string name="no">no</string>
+    <string name="open_socket_server_txt">Opening a server socket</string>
     <string name="p2p_off_warning">Enable P2P from action bar button above or system settings</string>
     <string name="sending_txt">\"Sending: \"</string>
     <string name="status_bar_notification_info_overflow">999+</string>

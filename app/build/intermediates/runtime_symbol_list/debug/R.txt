@@ -178,10 +178,11 @@ int string group_owner_text 0x7f090009
 int string label_me 0x7f09000a
 int string label_peers 0x7f09000b
 int string no 0x7f09000c
-int string p2p_off_warning 0x7f09000d
-int string sending_txt 0x7f09000e
-int string status_bar_notification_info_overflow 0x7f09000f
-int string yes 0x7f090010
+int string open_socket_server_txt 0x7f09000d
+int string p2p_off_warning 0x7f09000e
+int string sending_txt 0x7f09000f
+int string status_bar_notification_info_overflow 0x7f090010
+int string yes 0x7f090011
 int style TextAppearance_Compat_Notification 0x7f0a0000
 int style TextAppearance_Compat_Notification_Info 0x7f0a0001
 int style TextAppearance_Compat_Notification_Line2 0x7f0a0002

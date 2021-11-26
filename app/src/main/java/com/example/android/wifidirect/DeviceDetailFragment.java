@@ -426,6 +426,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         dirs.mkdirs();
                     globalFile.createNewFile();
 
+
                     Log.d(WiFiDirectActivity.TAG, "server: copying files " + globalFile.toString());
 
                     OutputStream outputStream = new FileOutputStream(globalFile);

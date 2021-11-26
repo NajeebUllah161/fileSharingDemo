@@ -179,6 +179,7 @@ string group_owner_text
 string label_me
 string label_peers
 string no
+string open_socket_server_txt
 string p2p_off_warning
 string sending_txt
 string status_bar_notification_info_overflow
