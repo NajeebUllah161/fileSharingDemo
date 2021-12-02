@@ -1,12 +1,12 @@
-#Thu Dec 02 11:41:04 PKT 2021
+#Thu Dec 02 12:30:05 PKT 2021
 path.3=5/classes.dex
 path.2=2/classes.dex
 path.1=0/classes.dex
 path.0=classes.dex
-base.3=C\:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\5\\classes.dex
-base.2=C\:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\2\\classes.dex
-base.1=C\:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
-base.0=C\:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.3=C\:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\5\\classes.dex
+base.2=C\:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\2\\classes.dex
+base.1=C\:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.0=C\:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 renamed.3=classes4.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex

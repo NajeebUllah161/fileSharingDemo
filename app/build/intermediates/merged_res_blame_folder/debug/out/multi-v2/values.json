@@ -1,42 +1,8 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
-                {
-                    "source": "C:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\src\\main\\res\\values\\strings.xml",
-                    "from": {
-                        "startLines": "2,11,5,6,4,8,12,3,7,14,15,16,10,18,13,17,9",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "57,513,225,282,165,405,641,107,345,860,931,972,478,1074,756,1019,441",
-                        "endColumns": "48,126,55,61,58,34,113,56,58,69,39,45,33,74,102,53,35",
-                        "endOffsets": "101,635,276,339,219,435,750,159,399,925,966,1013,507,1144,854,1068,472"
-                    },
-                    "to": {
-                        "startLines": "86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,103",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "5144,5193,5320,5376,5438,5497,5524,5638,5695,5754,5824,5864,5910,5944,6019,6122,6247",
-                        "endColumns": "48,126,55,61,58,26,113,56,58,69,39,45,33,74,102,53,35",
-                        "endOffsets": "5188,5315,5371,5433,5492,5519,5633,5690,5749,5819,5859,5905,5939,6014,6117,6171,6278"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\src\\main\\res\\values\\dimens.xml",
-                    "from": {
-                        "startLines": "18,17",
-                        "startColumns": "4,4",
-                        "startOffsets": "712,662",
-                        "endColumns": "49,49",
-                        "endOffsets": "757,707"
-                    },
-                    "to": {
-                        "startLines": "30,31",
-                        "startColumns": "4,4",
-                        "startOffsets": "1922,1972",
-                        "endColumns": "49,49",
-                        "endOffsets": "1967,2017"
-                    }
-                },
                 {
                     "source": "C:\\Users\\NAJEEB\\.gradle\\caches\\transforms-3\\97e7ec19bd11dff7ae3d399ac9d0fa5b\\transformed\\core-1.5.0\\res\\values\\values.xml",
                     "from": {
@@ -57,7 +23,41 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\NAJEEB\\Documents\\lads\\File-Sharing\\Wifi-Direct-Demo\\app\\src\\main\\res\\values\\colors.xml",
+                    "source": "C:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\src\\main\\res\\values\\dimens.xml",
+                    "from": {
+                        "startLines": "18,17",
+                        "startColumns": "4,4",
+                        "startOffsets": "712,662",
+                        "endColumns": "49,49",
+                        "endOffsets": "757,707"
+                    },
+                    "to": {
+                        "startLines": "30,31",
+                        "startColumns": "4,4",
+                        "startOffsets": "1922,1972",
+                        "endColumns": "49,49",
+                        "endOffsets": "1967,2017"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "2,11,5,6,4,8,12,3,7,14,15,16,10,18,13,17,9",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "57,513,225,282,165,405,641,107,345,860,931,972,478,1074,756,1019,441",
+                        "endColumns": "48,126,55,61,58,34,113,56,58,69,39,45,33,74,102,53,35",
+                        "endOffsets": "101,635,276,339,219,435,750,159,399,925,966,1013,507,1144,854,1068,472"
+                    },
+                    "to": {
+                        "startLines": "86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,103",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "5144,5193,5320,5376,5438,5497,5524,5638,5695,5754,5824,5864,5910,5944,6019,6122,6247",
+                        "endColumns": "48,126,55,61,58,26,113,56,58,69,39,45,33,74,102,53,35",
+                        "endOffsets": "5188,5315,5371,5433,5492,5519,5633,5690,5749,5819,5859,5905,5939,6014,6117,6171,6278"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\NAJEEB\\Desktop\\File_Sharing_App\\Prototypes\\Java-Prototype\\Wifi-Direct-Demo\\app\\src\\main\\res\\values\\colors.xml",
                     "from": {
                         "startLines": "3,2",
                         "startColumns": "4,4",
