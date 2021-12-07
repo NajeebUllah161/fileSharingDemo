@@ -5,7 +5,7 @@
     android:versionName="1.0" > <!-- runtime permission check API is on Android 6.0 or higher -->
     <uses-sdk
         android:minSdkVersion="23"
-        android:targetSdkVersion="23" />
+        android:targetSdkVersion="31" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Google Play filtering -->
     <uses-feature
         android:name="android.hardware.wifi.direct"
@@ -39,11 +39,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- <service android:name="com.example.android.wifidirect" -->
-            <!-- tools:ignore="MissingClass,WrongManifestParent"> -->
-
-
-            <!-- </service> -->
         </activity>
 
         <provider
@@ -59,7 +54,8 @@
         <!-- Used for transferring files  after a successful connection -->
         <service
             android:name="com.example.android.wifidirect.FileTransferService"
-            android:enabled="true" />
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

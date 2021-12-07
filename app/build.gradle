@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "com.example.android.wifidirect"
         minSdkVersion 23
-        targetSdkVersion 23
+        targetSdkVersion 31
     }
 
     buildTypes {
@@ -22,4 +23,10 @@ dependencies{
     def core_version = "1.5.0"
 
     implementation("androidx.core:core:$core_version")
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
+    google()
 }
